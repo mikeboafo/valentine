@@ -2,26 +2,71 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"/>
   <title>Be My Valentine 💖</title>
 
   <style>
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      font-family: "Segoe UI", sans-serif;
-      overflow: hidden;
+      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+      padding: 15px;
+      position: relative;
     }
 
+    /* Floating hearts background for all screens */
+    .floating-hearts-bg {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .floating-heart-bg {
+      position: absolute;
+      font-size: 20px;
+      animation: floatUp 15s linear infinite;
+      opacity: 0.3;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) rotate(0deg) translateX(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.3;
+      }
+      90% {
+        opacity: 0.3;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg) translateX(20px);
+        opacity: 0;
+      }
+    }
+
+    /* Main card */
     .card {
       background: white;
-      padding: 30px 25px 45px;
+      padding: 25px 20px 40px;
       border-radius: 20px;
-      width: 90%;
+      width: 100%;
       max-width: 400px;
       text-align: center;
       box-shadow: 0 15px 40px rgba(0,0,0,0.25);
@@ -32,7 +77,9 @@
     h1 {
       color: #ff4d6d;
       margin-bottom: 25px;
-      font-size: 24px;
+      font-size: clamp(20px, 5vw, 28px);
+      line-height: 1.4;
+      padding: 0 10px;
     }
 
     .buttons {
@@ -42,14 +89,16 @@
     }
 
     button {
-      padding: 14px 26px;
-      font-size: 18px;
+      padding: clamp(12px, 3vw, 16px) clamp(20px, 4vw, 26px);
+      font-size: clamp(16px, 4vw, 18px);
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      min-width: 120px;
+      min-width: 110px;
       user-select: none;
       transition: all 0.2s ease;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     /* NO — LEFT (moves on hover) */
@@ -75,7 +124,7 @@
       bottom: 0;
     }
 
-    #yes:hover {
+    #yes:hover, #yes:active {
       background: #ff3359;
       transform: scale(1.05);
     }
@@ -90,19 +139,22 @@
       align-items: center;
       z-index: 1000;
       backdrop-filter: blur(5px);
+      padding: 15px;
+      overflow-y: auto;
     }
 
     .meme-box {
       background: white;
-      border-radius: 24px;
-      padding: 30px;
-      width: 90%;
+      border-radius: 20px;
+      padding: clamp(20px, 4vw, 30px);
+      width: 100%;
       max-width: 450px;
       text-align: center;
       animation: pop 0.5s ease;
       position: relative;
       box-shadow: 0 25px 50px rgba(0,0,0,0.3);
       border: 5px solid #ff4d6d;
+      margin: auto;
     }
 
     @keyframes pop {
@@ -113,7 +165,9 @@
     .meme-box h2 {
       color: #ff4d6d;
       margin-bottom: 20px;
-      font-size: 28px;
+      font-size: clamp(22px, 5vw, 28px);
+      line-height: 1.3;
+      padding: 0 10px;
     }
 
     /* MEME IMAGE FIX */
@@ -141,10 +195,11 @@
       justify-content: center;
       align-items: center;
       border: 3px solid #ff4d6d;
+      padding: 20px;
     }
 
     .fallback-heart {
-      font-size: 80px;
+      font-size: clamp(60px, 15vw, 80px);
       margin-bottom: 15px;
       animation: heartbeat 1.5s infinite;
     }
@@ -156,13 +211,13 @@
     }
 
     .meme-box p {
-      font-size: 20px;
+      font-size: clamp(16px, 4vw, 20px);
       color: #333;
       margin-top: 20px;
-      line-height: 1.6;
+      line-height: 1.5;
       font-weight: 500;
       background: linear-gradient(135deg, #fff5f7, #ffeef1);
-      padding: 15px;
+      padding: clamp(12px, 3vw, 15px);
       border-radius: 12px;
       border: 2px dashed #ff4d6d;
     }
@@ -170,8 +225,8 @@
     /* Close button for meme */
     .close-btn {
       position: absolute;
-      top: 15px;
-      right: 15px;
+      top: 10px;
+      right: 10px;
       background: #ff4d6d;
       color: white;
       border: none;
@@ -185,14 +240,15 @@
       justify-content: center;
       transition: all 0.2s ease;
       z-index: 1001;
+      touch-action: manipulation;
     }
 
-    .close-btn:hover {
+    .close-btn:hover, .close-btn:active {
       background: #ff3359;
       transform: rotate(90deg) scale(1.1);
     }
 
-    /* Floating hearts in background */
+    /* Floating hearts in meme overlay */
     .floating-hearts {
       position: absolute;
       width: 100%;
@@ -204,12 +260,12 @@
 
     .floating-heart {
       position: absolute;
-      font-size: 24px;
-      animation: floatUp 4s linear infinite;
+      font-size: 20px;
+      animation: floatUpFast 4s linear infinite;
       opacity: 0;
     }
 
-    @keyframes floatUp {
+    @keyframes floatUpFast {
       0% {
         transform: translateY(100px) rotate(0deg);
         opacity: 0;
@@ -226,27 +282,139 @@
       }
     }
 
-    /* Mobile responsive */
-    @media (max-width: 500px) {
+    /* ===================== RESPONSIVE MEDIA QUERIES ===================== */
+    
+    /* Large phones and small tablets (481px to 768px) */
+    @media (min-width: 481px) and (max-width: 768px) {
+      .card {
+        padding: 30px 25px 45px;
+      }
+      
+      .buttons {
+        height: 150px;
+      }
+      
+      #no, #yes {
+        min-width: 130px;
+      }
+    }
+    
+    /* Tablets and small laptops (769px to 1024px) */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .card {
+        max-width: 450px;
+        padding: 35px 30px 50px;
+      }
+      
+      h1 {
+        font-size: 30px;
+      }
+      
       .meme-box {
-        padding: 20px;
-        margin: 20px;
+        max-width: 500px;
+      }
+    }
+    
+    /* Desktops and larger (1025px and up) */
+    @media (min-width: 1025px) {
+      .card {
+        max-width: 500px;
+        padding: 40px 35px 55px;
+      }
+      
+      h1 {
+        font-size: 32px;
+      }
+    }
+    
+    /* Very small phones (up to 360px) */
+    @media (max-width: 360px) {
+      .card {
+        padding: 20px 15px 35px;
+        border-radius: 16px;
+      }
+      
+      h1 {
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+      
+      .buttons {
+        height: 130px;
+        margin-top: 20px;
+      }
+      
+      button {
+        min-width: 100px;
+        padding: 10px 16px;
+        font-size: 15px;
+      }
+      
+      .meme-box {
+        padding: 15px;
       }
       
       .meme-box h2 {
-        font-size: 24px;
+        font-size: 20px;
+        margin-bottom: 15px;
       }
       
       .meme-box p {
-        font-size: 18px;
+        font-size: 15px;
+        margin-top: 15px;
+      }
+      
+      .close-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 20px;
+      }
+    }
+    
+    /* Landscape orientation */
+    @media (max-height: 500px) and (orientation: landscape) {
+      body {
+        align-items: flex-start;
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+      
+      .card {
+        max-width: 90%;
+        padding: 20px 25px 30px;
+      }
+      
+      .buttons {
+        height: 100px;
+        margin-top: 20px;
+      }
+      
+      h1 {
+        margin-bottom: 15px;
+      }
+    }
+    
+    /* Prevent text size adjustment on mobile */
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+    
+    /* Improve button tap targets for mobile */
+    @media (max-width: 768px) {
+      button {
+        min-height: 44px; /* Apple's recommended minimum tap target size */
       }
     }
   </style>
 </head>
 <body>
 
+  <!-- Background floating hearts -->
+  <div class="floating-hearts-bg" id="floatingHeartsBg"></div>
+
   <div class="card">
-    <h1>Priscilla, will you be my Valentine? 💕</h1>
+    <h1>P, will you be my Valentine? 💕</h1>
 
     <div class="buttons" id="buttons">
       <button id="no">No 😭</button>
@@ -258,13 +426,13 @@
   <div class="meme-overlay" id="meme">
     <div class="meme-box">
       <button class="close-btn" id="closeMeme">×</button>
-      <h2>🎉 Yay! Priscilla You said YES! 🎉</h2>
+      <h2>🎉 Yay You said YES! 🎉</h2>
       
       <!-- Your original meme image with multiple fallbacks -->
       <div id="memeContainer">
         <img 
           class="meme-img" 
-          src="https://i.imgflip.com/6qk0l2.jpg" 
+          src="/j1.jpeg" 
           alt="Happy Valentine Meme"
           id="memeImage"
         >
@@ -295,16 +463,34 @@
     const memeContainer = document.getElementById("memeContainer");
     const memeImage = document.getElementById("memeImage");
     const floatingHearts = document.getElementById("floatingHearts");
+    const floatingHeartsBg = document.getElementById("floatingHeartsBg");
 
-    // Multiple image sources to ensure one works
+    // Multiple image sources - j1 is the primary imported meme
     const memeImageSources = [
-      "https://i.imgflip.com/6qk0l2.jpg",  // Your original image
-      "https://i.imgflip.com/1bij.jpg",    // Alternative 1
-      "https://i.imgflip.com/1bh8.jpg",    // Alternative 2
-      "https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?w=400&h=300&fit=crop" // Fallback
+      "j1.jpeg",  // Your imported j1 meme image
+      "https://i.imgflip.com/6qk0l2.jpg",  // Fallback 1
+      "https://i.imgflip.com/1bij.jpg",    // Fallback 2
+      "https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?w=400&h=300&fit=crop" // Final fallback
     ];
 
-    // Create floating hearts animation
+    // Create background floating hearts
+    function createBackgroundHearts() {
+      floatingHeartsBg.innerHTML = '';
+      const heartEmojis = ['💖', '💘', '💕', '💓', '💗', '💞'];
+      
+      for (let i = 0; i < 20; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'floating-heart-bg';
+        heart.innerHTML = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDelay = Math.random() * 15 + 's';
+        heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+        heart.style.opacity = (Math.random() * 0.3 + 0.1).toFixed(2);
+        floatingHeartsBg.appendChild(heart);
+      }
+    }
+
+    // Create floating hearts animation for overlay
     function createFloatingHearts() {
       floatingHearts.innerHTML = '';
       const heartEmojis = ['💖', '💘', '💕', '💓', '💗', '💞'];
@@ -339,8 +525,8 @@
         memeContainer.innerHTML = `
           <div class="meme-fallback">
             <div class="fallback-heart">💖</div>
-            <div style="font-size: 24px; color: #ff4d6d; font-weight: bold;">WE DID IT! 🎊</div>
-            <div style="font-size: 18px; color: #333;">Best Valentine Ever! 💕</div>
+            <div style="font-size: clamp(20px, 5vw, 24px); color: #ff4d6d; font-weight: bold;">WE DID IT! 🎊</div>
+            <div style="font-size: clamp(16px, 4vw, 18px); color: #333;">Best Valentine Ever! 💕</div>
           </div>
         `;
       }
@@ -348,7 +534,7 @@
       // Set up error handling
       memeImage.onerror = tryNextImage;
       
-      // Try first image
+      // Try first image (j1.jpg)
       tryNextImage();
     }
 
@@ -368,10 +554,21 @@
       sound.play().catch(e => console.log("Audio error:", e));
     });
 
-    // Mobile support
+    // Mobile support for NO button
     noBtn.addEventListener("touchstart", (e) => {
       e.preventDefault();
-      noBtn.dispatchEvent(new Event("mouseenter"));
+      const area = buttons.getBoundingClientRect();
+      const maxX = area.width - noBtn.offsetWidth - 20;
+      const maxY = area.height - noBtn.offsetHeight - 20;
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+      
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+      
+      // Play sound
+      sound.currentTime = 0;
+      sound.play().catch(e => console.log("Audio error:", e));
     });
 
     // YES button click
@@ -458,10 +655,14 @@
       }
     });
 
-    // Preload sound
+    // Initialize background hearts and preload sound
     window.addEventListener('load', () => {
+      createBackgroundHearts();
       sound.load();
     });
+
+    // Refresh background hearts on resize
+    window.addEventListener('resize', createBackgroundHearts);
   </script>
 
 </body>
