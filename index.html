@@ -168,7 +168,6 @@
       font-size: clamp(22px, 5vw, 28px);
       line-height: 1.3;
       padding: 0 10px;
-      margin-top: 10px; /* Added space for close button */
     }
 
     /* MEME IMAGE FIX */
@@ -221,34 +220,6 @@
       padding: clamp(12px, 3vw, 15px);
       border-radius: 12px;
       border: 2px dashed #ff4d6d;
-    }
-
-    /* Close button for meme - FIXED POSITION */
-    .close-btn {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: #ff4d6d;
-      color: white;
-      border: none;
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      font-size: 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 1001;
-      touch-action: manipulation;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-    }
-
-    .close-btn:hover, .close-btn:active {
-      background: #ff3359;
-      transform: rotate(90deg) scale(1.1);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
     /* Floating hearts in meme overlay */
@@ -360,20 +331,11 @@
       .meme-box h2 {
         font-size: 20px;
         margin-bottom: 15px;
-        margin-top: 5px;
       }
       
       .meme-box p {
         font-size: 15px;
         margin-top: 15px;
-      }
-      
-      .close-btn {
-        width: 30px;
-        height: 30px;
-        font-size: 18px;
-        top: 10px;
-        right: 10px;
       }
     }
     
@@ -416,10 +378,6 @@
       button {
         min-height: 44px; /* Apple's recommended minimum tap target size */
       }
-      
-      .close-btn {
-        min-height: 35px; /* Still large enough to tap */
-      }
     }
   </style>
 </head>
@@ -440,7 +398,6 @@
   <!-- Meme Overlay -->
   <div class="meme-overlay" id="meme">
     <div class="meme-box">
-      <button class="close-btn" id="closeMeme">×</button>
       <h2>🎉 Yay You said YES! 🎉</h2>
       
       <!-- Your original meme image with multiple fallbacks -->
@@ -473,7 +430,6 @@
     const yesBtn = document.getElementById("yes");
     const buttons = document.getElementById("buttons");
     const meme = document.getElementById("meme");
-    const closeMemeBtn = document.getElementById("closeMeme");
     const sound = document.getElementById("sound");
     const memeContainer = document.getElementById("memeContainer");
     const memeImage = document.getElementById("memeImage");
@@ -637,14 +593,6 @@
         // Store interval to clear later
         meme.dataset.confettiInterval = confettiInterval;
       }, 400);
-    });
-
-    // Close meme overlay
-    closeMemeBtn.addEventListener("click", () => {
-      meme.style.display = "none";
-      if (meme.dataset.confettiInterval) {
-        clearInterval(parseInt(meme.dataset.confettiInterval));
-      }
     });
 
     // Close meme when clicking outside
